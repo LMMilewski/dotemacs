@@ -8,6 +8,19 @@
 (add-to-list 'auto-mode-alist '("SConstruct" . python-mode))
 (add-to-list 'auto-mode-alist '("SConscript" . python-mode))
 
+(if (equal system-type 'darwin)
+    (setq exec-path (append '("/usr/local/bin/") exec-path)))
+
+(if (equal system-type 'darwin)
+    (setq load-path (append '("/Users/lmm/emacs/psvn")
+                            '("/Users/lmm/emacs/yas")
+                            '("/Users/lmm/emacs/magit")
+                            load-path))
+  (setq load-path (append '("/home/lmm/emacs/psvn")
+                          '("/home/lmm/emacs/yas")
+                          '("/home/lmm/emacs/magit")
+                          load-path)))
+
 (require 'magit)
 (global-set-key [f12] 'magit-status)
 (global-set-key (kbd "M-o") 'other-window)
@@ -23,12 +36,11 @@
 (setq tab-width 4)
 (add-hook 'c++-mode-hook (lambda () (c-set-style "stroustrup")))
 
-(setq load-path (append '("/home/lmm/emacs/psvn")
-			'("/home/lmm/emacs/yas")
-			load-path))
 (require 'yasnippet)
 (yas/initialize)
-(yas/load-directory "/home/lmm/emacs/yas/snippets")
+(if (equal system-type 'darwin)
+    (yas/load-directory "/Users/lmm/emacs/yas/snippets")
+  (yas/load-directory "/home/lmm/emacs/yas/snippets"))
 			  
 
 (setq default-frame-alist '((background-color . "white")
@@ -48,7 +60,8 @@
 
 (show-paren-mode t)
 (menu-bar-mode nil)
-(tool-bar-mode nil)
+(unless (equal system-type 'darwin)
+  (tool-bar-mode nil))
 (transient-mark-mode t)
 (font-lock-mode t)
 (scroll-bar-mode -1)

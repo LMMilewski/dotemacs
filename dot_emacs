@@ -1,6 +1,9 @@
 ; -*- emacs-lisp -*-
 (server-mode t)
 
+(custom-set-variables '(show-trailing-whitespace t))
+(setq show-trailing-whitespace 1)
+
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-to-list 'auto-mode-alist '("\\.h\\'"   . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
@@ -25,11 +28,21 @@
 
 (setq load-path (append '("/home/lmm/emacs/psvn")
 			'("/home/lmm/emacs/yas")
+                        '("/home/lmm/emacs/json")
+                        '("/home/lmm/emacs/google-maps")
+                        '("/home/lmm/emacs/erlang-mode")
 			load-path))
+(setq erlang-root-dir "/home/lmm/otp/otp_src")
+(setq exec-path (cons "/home/lmm/otp/otp_src/bin" exec-path))
+(require 'erlang-start)
+(require 'erlang-flymake)
+
+(require 'json)
+(require 'google-maps)
+
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "/home/lmm/emacs/yas/snippets")
-			  
 
 (setq default-frame-alist '((background-color . "white")
 			    (foreground-color . "black")
@@ -78,7 +91,7 @@
 
 (defun lmm-create-tags ()
   (interactive)
-  (let ((command (cond ((string-equal major-mode "perl-mode") "etags * lib/*pm")
+  (let ((command (cond ((string-equal major-mode "perl-mode") "etags *")
 		       ((or (string-equal major-mode "c-mode")
 			    (string-equal major-mode "c++-mode")) "etags *.cpp *.h")
 		       ((string-equal major-mode "erlang-mode") "etags *.erl"))))
@@ -133,7 +146,7 @@
       (indent-region sub-beg (point)))))
 
 ;; copy file to Dropbox directory
-(defun lmm-save-dot-emacs() 
+(defun lmm-save-dot-emacs()
   (interactive)
   (shell-command "cp -f ~/.emacs ~/Pulpit/Dropbox/dot_emacs.el"))
 
@@ -167,7 +180,7 @@
 
 
 ;;==================================================
-;; STRZAŁKI 
+;; STRZAŁKI
 ;;==================================================
 ; Domyślnie:
 ;  lewo  - poprzednie okno
@@ -178,10 +191,10 @@
 ; (toggle-arrow-keys) aby zmienić strzałki na poruszanie się po oknie
 ;   (lewo, prawo, góra dół). Ponowne wywołanie przywraca domyślne
 ;   ustawienie
-; 
+;
 (defun scroll-down-one-line () (interactive) (scroll-down 1))
 (defun scroll-up-one-line () (interactive) (scroll-up 1))
-  
+
 (defvar toggled-arrow-keys t)
 (defun toggle-arrow-keys ()
   (interactive)
@@ -206,7 +219,7 @@
       (global-set-key (kbd "<left>") 'backward-char)
       (global-set-key (kbd "<right>") 'forward-char)
       (global-set-key (kbd "<up>") 'previous-line)
-      (global-set-key (kbd "<down>")'next-line)      
+      (global-set-key (kbd "<down>")'next-line)
       (setq toggled-arrow-keys t))))
 (toggle-arrow-keys)
 
@@ -268,3 +281,19 @@
 (set-face-attribute 'font-lock-comment-face nil :foreground "green4" :background "white")
 (set-face-attribute 'font-lock-preprocessor-face nil :weight 'bold :foreground "blue")
 (set-face-attribute 'font-lock-constant-face nil :foreground "black" :weight 'normal :underline "black")
+
+
+(defun erl-init-file ()
+  "insert -module and -export directives"
+  (interactive)
+  (let ((bufname (buffer-name)))
+    (string-match "\\(.*\\)\\.erl" bufname)
+    (insert "-module(" (match-string 1 bufname) ").\n"))
+  (insert "-export([]).\n")
+  (insert "\n")
+  (end-of-buffer))
+
+(add-hook 'erlang-mode-hook (lambda () (interactive)
+                              (when (eobp)
+                                (erl-init-file))))
+

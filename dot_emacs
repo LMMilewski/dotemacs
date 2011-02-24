@@ -1,9 +1,13 @@
 ; -*- emacs-lisp -*-
 (server-mode t)
 
-(custom-set-variables '(show-trailing-whitespace t))
-(setq show-trailing-whitespace 1)
+;; set look&feel
+(setq default-frame-alist '((background-color . "white")
+			    (foreground-color . "black")
+			    (cursor-color     . "black")
+			    (font . "-adobe-courier-medium-r-normal--18-180-75-75-m-110-iso8859-1")))
 
+;; set major mode according to filename
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-to-list 'auto-mode-alist '("\\.h\\'"   . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
@@ -11,64 +15,35 @@
 (add-to-list 'auto-mode-alist '("SConstruct" . python-mode))
 (add-to-list 'auto-mode-alist '("SConscript" . python-mode))
 
-(if (equal system-type 'darwin)
-    (setq exec-path (append '("/usr/local/bin/") exec-path)))
+;; check os
+(setq mac (equal system-type 'darwin))
+(setq my-home-dir (if mac "/Users/lmm/" "/home/lmm/"))
+(setq my-emacs-dir (concat my-home-dir "emacs/"))
+(when mac (load-file (concat my-emacs-dir "mac.el")))
 
-(if (equal system-type 'darwin)
-    (setq load-path (append '("/Users/lmm/emacs/psvn")
-                            '("/Users/lmm/emacs/yas")
-                            '("/Users/lmm/emacs/magit")
-                            '("/Users/lmm/emacs/json")
-                            '("/Users/lmm/emacs/google-maps")
-                            '("/Users/lmm/emacs/erlang-mode")
-                            load-path))
-  (setq load-path (append '("/home/lmm/emacs/psvn")
-                          '("/home/lmm/emacs/yas")
-                          '("/home/lmm/emacs/magit")
-                          '("/home/lmm/emacs/json")
-                          '("/home/lmm/emacs/google-maps")
-                          '("/home/lmm/emacs/erlang-mode")
-                          load-path)))
+;; load modules
+(setq modules-to-load (mapcar (lambda (module-name) (concat my-emacs-dir module-name))
+                              '("psvn" "yas" "magit" "json" "google-maps" "erlang-mode")))
+(setq load-path (append modules-to-load load-path))
+(load-file (concat my-emacs-dir "erlang.el"))
 
-(require 'magit)
-(global-set-key [f12] 'magit-status)
-(global-set-key (kbd "M-o") 'other-window)
-
-;; (defvar backup-dir (expand-file-name "/tmp/"))
-;; (defvar autosave-dir (expand-file-name "/tmp/"))
-;; (setq backup-directory-alist (list (cons ".*" backup-dir)))
-;; (setq auto-save-list-file-prefix autosave-dir)
-;; (setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
-(setq delete-old-versions 1)
-
+;; set indentation
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
 (add-hook 'c++-mode-hook (lambda () (c-set-style "stroustrup")))
 
-(if (equal system-type 'darwin)
-    (progn (setq erlang-root-dir "/Users/lmm/otp/otp_src")
-           (setq exec-path (cons "/Users/lmm/otp/otp_src/bin" exec-path)))
-  (progn (setq erlang-root-dir "/home/lmm/otp/otp_src")
-         (setq exec-path (cons "/home/lmm/otp/otp_src/bin" exec-path))))
+(custom-set-variables '(show-trailing-whitespace t))
+(setq show-trailing-whitespace 1)
 
-(require 'erlang-start)
-(require 'erlang-flymake)
+(require 'magit)
+(global-set-key [f12] 'magit-status)
 
 (require 'json)
 (require 'google-maps)
 
 (require 'yasnippet)
 (yas/initialize)
-(if (equal system-type 'darwin)
-    (yas/load-directory "/Users/lmm/emacs/yas/snippets")
-  (yas/load-directory "/home/lmm/emacs/yas/snippets"))
-
-
-(setq default-frame-alist '((background-color . "white")
-			    (foreground-color . "black")
-			    (cursor-color     . "black")
-			    (font . "-adobe-courier-medium-r-normal--18-180-75-75-m-110-iso8859-1")))
-
+(yas/load-directory (concat my-emacs-dir "yas/snippets"))
 
 (global-set-key [f2] 'new-frame)
 (global-set-key [f7] (lambda () (interactive) (find-file "~/.emacs")))
@@ -108,7 +83,6 @@
 (put 'set-goal-column 'disabled nil)
 (put 'scroll-left 'disabled nil)
 (put 'erase-buffer 'disabled nil)
-
 
 (defun lmm-create-tags ()
   (interactive)
@@ -166,14 +140,6 @@
     (let ((sub-beg (save-excursion (search-backward "sub") (point))))
       (indent-region sub-beg (point)))))
 
-;; copy file to Dropbox directory
-(defun lmm-save-dot-emacs()
-  (interactive)
-  (shell-command "cp -f ~/.emacs ~/Pulpit/Dropbox/dot_emacs.el"))
-
-(add-hook 'after-save-hook (lambda () (interactive)
-                             (if (equal (buffer-name) ".emacs")
-                                 (lmm-save-dot-emacs))))
 
 (global-set-key [(f4)] (lambda () (interactive)
                          (if (equal (buffer-name) "*eshell*")
@@ -304,17 +270,6 @@
 (set-face-attribute 'font-lock-constant-face nil :foreground "black" :weight 'normal :underline "black")
 
 
-(defun erl-init-file ()
-  "insert -module and -export directives"
-  (interactive)
-  (let ((bufname (buffer-name)))
-    (string-match "\\(.*\\)\\.erl" bufname)
-    (insert "-module(" (match-string 1 bufname) ").\n"))
-  (insert "-export([]).\n")
-  (insert "\n")
-  (end-of-buffer))
-
-(add-hook 'erlang-mode-hook (lambda () (interactive)
-                              (when (eobp)
-                                (erl-init-file))))
-
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)

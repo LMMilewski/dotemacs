@@ -1,5 +1,5 @@
-(setq erlang-root-dir (concat my-home-dir "otp/otp_src")
-      exec-path (cons (concat my-home-dir "otp/otp_src/bin") exec-path))
+(setq erlang-root-dir (concat my-home-dir "otp/")
+      exec-path (cons (concat my-home-dir "otp/bin") exec-path))
 
 (require 'erlang-start)
 (require 'erlang-flymake)

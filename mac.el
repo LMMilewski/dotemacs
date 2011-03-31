@@ -1,1 +1,1 @@
-(setq exec-path (append '("/usr/local/bin/") exec-path))
+(setq exec-path (append '("/usr/local/bin/" "/opt/local/bin/") exec-path))

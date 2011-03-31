@@ -4,7 +4,7 @@
 ;; set look&feel
 (setq default-frame-alist '((background-color . "white")
 			    (foreground-color . "black")
-			    (cursor-color     . "black")
+			    (cursor-color     . "gray")
 			    (font . "-adobe-courier-medium-r-normal--18-180-75-75-m-110-iso8859-1")))
 
 ;; set major mode according to filename
@@ -273,3 +273,11 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+
+(defun sh ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1)
+  (eshell))
+
+(defalias 'psh 'python-shell) 

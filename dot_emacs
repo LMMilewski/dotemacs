@@ -4,7 +4,7 @@
 ;; set look&feel
 (setq default-frame-alist '((background-color . "white")
 			    (foreground-color . "black")
-			    (cursor-color     . "gray")
+			    (cursor-color     . "#6c6c6c")
 			    (font . "-adobe-courier-medium-r-normal--18-180-75-75-m-110-iso8859-1")))
 
 ;; set major mode according to filename
@@ -32,19 +32,23 @@
 (setq tab-width 4)
 (add-hook 'c++-mode-hook (lambda () (c-set-style "stroustrup")))
 
+;; higlight current line
+;; http://emacs-fu.blogspot.com/2008/12/highlighting-current-line.html
+(defface hl-line '((t (:background "Gray")))
+  "Face to use for `hl-line-face'." :group 'hl-line)
+(setq hl-line-face 'hl-line)
+(global-hl-line-mode t) ; turn it on for all modes by default
+
+;; marek tabs, trailing whitespaces and too long lines
 (require 'whitespace)
 (setq whitespace-style '(tabs
                          lines-tail
                          trailing))
 (global-whitespace-mode t)
-;; (custom-set-variables '(show-trailing-whitespace t))
-;; (setq show-trailing-whitespace 1)
 
+;; git mode for Emacs
 (require 'magit)
 (global-set-key [f12] 'magit-status)
-
-(require 'json)
-(require 'google-maps)
 
 (require 'yasnippet)
 (yas/initialize)

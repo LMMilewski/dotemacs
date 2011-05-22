@@ -32,8 +32,13 @@
 (setq tab-width 4)
 (add-hook 'c++-mode-hook (lambda () (c-set-style "stroustrup")))
 
-(custom-set-variables '(show-trailing-whitespace t))
-(setq show-trailing-whitespace 1)
+(require 'whitespace)
+(setq whitespace-style '(tabs
+                         lines-tail
+                         trailing))
+(global-whitespace-mode t)
+;; (custom-set-variables '(show-trailing-whitespace t))
+;; (setq show-trailing-whitespace 1)
 
 (require 'magit)
 (global-set-key [f12] 'magit-status)

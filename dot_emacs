@@ -289,4 +289,9 @@
   (other-window 1)
   (eshell))
 
-(defalias 'psh 'python-shell) 
+(defalias 'psh 'python-shell)
+
+;; set limit to 50 chars without warning when creating git commit msg
+(font-lock-add-keywords 'magit-log-edit-mode
+                        '(("\\`[^\n]\\{50\\}\\(.*\\)" 1 font-lock-warning-face)))
+(add-hook 'magit-log-edit-mode-hook 'font-lock-fontify-buffer)

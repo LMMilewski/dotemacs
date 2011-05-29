@@ -21,8 +21,14 @@
 (when mac (load-file (concat my-emacs-dir "mac.el")))
 
 ;; load modules
-(setq modules-to-load (mapcar (lambda (module-name) (concat my-emacs-dir module-name))
-                              '("psvn" "yas" "magit" "json" "google-maps" "erlang-mode")))
+(setq modules-to-load (mapcar (lambda (module-name)
+                                (concat my-emacs-dir module-name))
+                              '("psvn"
+                                "yas"
+                                "magit"
+                                "json"
+                                "google-maps"
+                                "erlang-mode")))
 (setq load-path (append modules-to-load load-path))
 (load-file (concat my-emacs-dir "erlang.el"))
 
@@ -143,7 +149,14 @@
       (end-of-line)
       (insert "\n")
       (while (car vars-list)
-        (insert (concat "die " "\"" (car vars-list)  " must be defined in [" fun-name  "]\\n\" " "unless defined $" (car vars-list) ";\n"))
+        (insert (concat "die " "\""
+                        (car vars-list)
+                        " must be defined in ["
+                        fun-name
+                        "]\\n\" "
+                        "unless defined $"
+                        (car vars-list)
+                        ";\n"))
         (setq vars-list (cdr vars-list))))
     (let ((sub-beg (save-excursion (search-backward "sub") (point))))
       (indent-region sub-beg (point)))))
@@ -157,7 +170,8 @@
                              (eshell)))))
 
 (global-set-key [(shift f4)] (lambda () (interactive)
-                               (if (equal (buffer-name (window-buffer (other-window 1))) "*eshell*")
+                               (if (equal (buffer-name (window-buffer (other-window 1)))
+                                          "*eshell*")
                                    (delete-window)gdb-display-breakpoints-buffer
                                  (progn
                                    (let ((start-window (selected-window)))
@@ -294,3 +308,7 @@
 (font-lock-add-keywords 'magit-log-edit-mode
                         '(("\\`[^\n]\\{50\\}\\(.*\\)" 1 font-lock-warning-face)))
 (add-hook 'magit-log-edit-mode-hook 'font-lock-fontify-buffer)
+
+
+;; set path to git
+(setq exec-path (cons "~/apps/git/bin/" exec-path))

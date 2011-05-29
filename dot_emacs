@@ -17,8 +17,7 @@
 
 ;; check os
 (setq mac (equal system-type 'darwin))
-(setq my-home-dir (if mac "/Users/lmm/" "/home/lmm/"))
-(setq my-emacs-dir (concat my-home-dir "emacs/"))
+(setq my-emacs-dir "~/dotemacs/")
 (when mac (load-file (concat my-emacs-dir "mac.el")))
 
 ;; load modules

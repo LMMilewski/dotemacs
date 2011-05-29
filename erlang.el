@@ -5,8 +5,8 @@
 ;; C-c C-c / C-u C-c C-c (comment/uncomment region)
 ;; M-a/M-e (goto begining/end of a function)
 
-(setq erlang-root-dir (concat my-home-dir "otp/")
-      exec-path (cons (concat my-home-dir "otp/bin") exec-path))
+(setq erlang-root-dir "~/otp/"
+      exec-path (cons "~/otp/bin/" exec-path))
 
 (require 'erlang-start)
 (require 'erlang-flymake)
@@ -29,5 +29,6 @@
                                 (erl-init-file))))
 
 (add-hook 'erlang-mode-hook (lambda () (interactive)
-                              (setq inferior-erlang-machine-options '("-sname" "emacs"))))
+                              (setq inferior-erlang-machine-options
+                                    '("-sname" "emacs"))))
 

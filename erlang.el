@@ -5,8 +5,8 @@
 ;; C-c C-c / C-u C-c C-c (comment/uncomment region)
 ;; M-a/M-e (goto begining/end of a function)
 
-(setq erlang-root-dir "~/lib/otp/"
-      exec-path (cons "~/lib/otp/bin/" exec-path))
+(setq erlang-root-dir "~/libs/otp/"
+      exec-path (cons "~/libs/otp/bin/" exec-path))
 
 (require 'erlang-start)
 (require 'erlang-flymake)

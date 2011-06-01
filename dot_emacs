@@ -1,11 +1,16 @@
 ; -*- emacs-lisp -*-
 (server-mode t)
 
-;; set look&feel
+;;; set look&feel
+;; to install Monaco font
+; sudo mkdir /usr/share/fonts/truetype/custom
+; sudo mv ~/dotemacs/fonts/Monaco_Linux.ttf /usr/share/fonts/truetype/custom
+; sudo fc-cache -fv
 (setq default-frame-alist '((background-color . "white")
 			    (foreground-color . "black")
 			    (cursor-color     . "#6c6c6c")
-			    (font . "-adobe-courier-medium-r-normal--18-180-75-75-m-110-iso8859-1")))
+                            (font             . "Monaco")))
+
 
 ;; set major mode according to filename
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))

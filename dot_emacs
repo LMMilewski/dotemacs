@@ -1,6 +1,8 @@
 ; -*- emacs-lisp -*-
 (server-mode t)
 
+(setq my-emacs-dir "~/dotemacs/")
+
 ;;; set look&feel
 ;; to install Monaco font
 ; sudo mkdir /usr/share/fonts/truetype/custom
@@ -19,11 +21,6 @@
 (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("SConstruct" . python-mode))
 (add-to-list 'auto-mode-alist '("SConscript" . python-mode))
-
-;; check os
-(setq mac (equal system-type 'darwin))
-(setq my-emacs-dir "~/dotemacs/")
-(when mac (load-file (concat my-emacs-dir "mac.el")))
 
 ;; load modules
 (setq modules-to-load (mapcar (lambda (module-name)
@@ -315,5 +312,18 @@
 (add-hook 'magit-log-edit-mode-hook 'font-lock-fontify-buffer)
 
 
-;; set path to git
-(setq exec-path (cons "~/apps/git/bin/" exec-path))
+;; setting exec path
+(defun add-exec-paths (new-paths)
+  (setq exec-path (append new-paths exec-path))
+  (setenv "PATH" (concat
+                  (getenv "PATH")
+                  ":"
+                  (mapconcat 'identity new-paths ":"))))
+
+(add-exec-paths '("~/apps/git/bin/"
+                  "~/libs/otp/bin/"))
+
+
+;; check os
+(when (equal system-type 'darwin)
+  (load-file (concat my-emacs-dir "mac.el")))

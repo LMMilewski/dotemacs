@@ -320,10 +320,8 @@
                   ":"
                   (mapconcat 'identity new-paths ":"))))
 
-(add-exec-paths '("~/apps/git/bin/"
-                  "~/libs/otp/bin/"))
-
 
 ;; check os
-(when (equal system-type 'darwin)
-  (load-file (concat my-emacs-dir "mac.el")))
+(if (equal system-type 'darwin)
+    (load-file (concat my-emacs-dir "mac.el"))
+  (load-file (concat my-emacs-dir "pc.el")))

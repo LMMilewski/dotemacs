@@ -10,11 +10,6 @@
       exec-path (cons (expand-file-name "~/libs/otp/bin/") exec-path))
 
 (require 'erlang-start)
-;; (require 'erlang-flymake)
-
-;;; Run erlang-mode automatically for erl and hrl files
-(add-to-list 'auto-mode-alist '("\\.erl?$" . erlang-mode))
-(add-to-list 'auto-mode-alist '("\\.hrl?$" . erlang-mode))
 
 ;;; Set options for elrang nodes run inside Emacs
 (add-hook 'erlang-mode-hook (lambda () (interactive)
@@ -22,17 +17,15 @@
                                     '("-sname" "emacs"))))
 
 
-;; ;;; Add paths to include and ebin dirs for dependencies (in projects using rebar)
-;; ;; add deps/ to includes (one usually use include_lib("LIB/include/LIB.hrl")
-;; ;; add deps/eqc/ebin, so that you can use flymake with quickcheck
-;; (defun erlang-flymake-get-code-path-dirs ()
-;;   (list (concat (erlang-flymake-get-app-dir) "ebin")
-;;         (concat (erlang-flymake-get-app-dir) "deps/eqc/ebin")))
-
-;; (defun erlang-flymake-get-include-dirs ()
-;;   (list (concat (erlang-flymake-get-app-dir) "include")
-;;         (concat (erlang-flymake-get-app-dir) "deps")))
-
+;;; Add paths to include and ebin dirs for dependencies (in projects using rebar)
+;; add deps/ to includes (one usually use include_lib("LIB/include/LIB.hrl")
+;; add deps/eqc/ebin, so that you can use flymake with quickcheck
+(defun erlang-flymake-get-code-path-dirs ()
+  (list (concat (erlang-flymake-get-app-dir) "ebin")
+        (concat (erlang-flymake-get-app-dir) "deps/eqc/ebin")))
+(defun erlang-flymake-get-include-dirs ()
+  (list (concat (erlang-flymake-get-app-dir) "include")
+        (concat (erlang-flymake-get-app-dir) "deps")))
 
 ;;;;;;;;;;;;;;;;;
 ;;; setup Distel
@@ -72,3 +65,20 @@
 
 (require 'distel)
 (distel-setup)
+
+
+;;; setup Flymake
+;; load flymake
+(require 'erlang-flymake)
+
+;; Workaround bug in OTP erlang-mode, so that flymake will work with
+;; distel smoothly
+(remove-hook 'erlang-mode-hook 'flymake-mode)
+(defun run-flymake-in-erlang ()
+  (interactive)
+  (let ( (extension (file-name-extension (buffer-name))) )
+    (if (and extension
+             (or (string-equal extension "erl")
+                 (string-equal extension "hrl")))
+        (flymake-mode t))))
+(add-hook 'find-file-hook 'run-flymake-in-erlang)

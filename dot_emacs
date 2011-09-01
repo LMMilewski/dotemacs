@@ -1,12 +1,24 @@
 ; -*- emacs-lisp -*-
 (server-mode t)
 
-(setq my-emacs-dir "~/dotemacs/")
+;; setting exec path
+(defun add-exec-paths (new-paths)
+  (setq exec-path (append new-paths exec-path))
+  (setenv "PATH" (concat
+                  (getenv "PATH")
+                  ":"
+                  (mapconcat 'identity new-paths ":"))))
+
+;; check os
+(setq my-emacs-dir (expand-file-name "~/dotemacs/"))
+(if (equal system-type 'darwin)
+    (load-file (concat my-emacs-dir "mac.el"))
+  (load-file (concat my-emacs-dir "pc.el")))
 
 ;;; set look&feel
 ;; to install Monaco font
 ; sudo mkdir /usr/share/fonts/truetype/custom
-; sudo mv ~/dotemacs/fonts/Monaco_Linux.ttf /usr/share/fonts/truetype/custom
+; sudo cp ~/dotemacs/fonts/Monaco_Linux.ttf /usr/share/fonts/truetype/custom
 ; sudo fc-cache -fv
 (setq default-frame-alist '((background-color . "white")
 			    (foreground-color . "black")
@@ -30,8 +42,10 @@
                                 "magit"
                                 "json"
                                 "google-maps"
-                                "erlang-mode")))
+                                "erlang-mode"
+                                "distel/elisp")))
 (setq load-path (append modules-to-load load-path))
+
 (load-file (concat my-emacs-dir "erlang.el"))
 
 ;; set indentation
@@ -312,16 +326,3 @@
 (add-hook 'magit-log-edit-mode-hook 'font-lock-fontify-buffer)
 
 
-;; setting exec path
-(defun add-exec-paths (new-paths)
-  (setq exec-path (append new-paths exec-path))
-  (setenv "PATH" (concat
-                  (getenv "PATH")
-                  ":"
-                  (mapconcat 'identity new-paths ":"))))
-
-
-;; check os
-(if (equal system-type 'darwin)
-    (load-file (concat my-emacs-dir "mac.el"))
-  (load-file (concat my-emacs-dir "pc.el")))

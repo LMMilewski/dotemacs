@@ -42,10 +42,9 @@
                                 "magit"
                                 "json"
                                 "google-maps"
-                                "erlang-mode"
-                                "distel/elisp")))
+                                "distel/elisp"
+                                "erlang-mode")))
 (setq load-path (append modules-to-load load-path))
-
 (load-file (concat my-emacs-dir "erlang.el"))
 
 ;; set indentation

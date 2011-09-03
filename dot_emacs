@@ -43,9 +43,16 @@
                                 "json"
                                 "google-maps"
                                 "distel/elisp"
-                                "erlang-mode")))
+                                "erlang-mode"
+                                "mo-git-blame")))
 (setq load-path (append modules-to-load load-path))
+
 (load-file (concat my-emacs-dir "erlang.el"))
+
+;; setup mo-git-blame
+(add-to-list 'load-path "~/.emacs.d/mo-git-blame")
+(autoload 'mo-git-blame-file "mo-git-blame" nil t)
+(autoload 'mo-git-blame-current "mo-git-blame" nil t)
 
 ;; set indentation
 (setq-default indent-tabs-mode nil)

@@ -16,17 +16,6 @@
                               (setq inferior-erlang-machine-options
                                     '("-sname" "emacs"))))
 
-
-;;; Add paths to include and ebin dirs for dependencies (in projects using rebar)
-;; add deps/ to includes (one usually use include_lib("LIB/include/LIB.hrl")
-;; add deps/eqc/ebin, so that you can use flymake with quickcheck
-(defun erlang-flymake-get-code-path-dirs ()
-  (list (concat (erlang-flymake-get-app-dir) "ebin")
-        (concat (erlang-flymake-get-app-dir) "deps/eqc/ebin")))
-(defun erlang-flymake-get-include-dirs ()
-  (list (concat (erlang-flymake-get-app-dir) "include")
-        (concat (erlang-flymake-get-app-dir) "deps")))
-
 ;;;;;;;;;;;;;;;;;
 ;;; setup Distel
 ;;;;;;;;;;;;;;;;;
@@ -77,3 +66,13 @@
                  (string-equal extension "hrl")))
         (flymake-mode t))))
 (add-hook 'find-file-hook 'run-flymake-in-erlang)
+
+;; Add paths to include and ebin dirs for dependencies (in projects using rebar)
+;; add deps/ to includes (one usually use include_lib("LIB/include/LIB.hrl")
+;; add deps/eqc/ebin, so that you can use flymake with quickcheck
+(defun erlang-flymake-get-code-path-dirs ()
+  (list (concat (erlang-flymake-get-app-dir) "ebin")
+        (concat (erlang-flymake-get-app-dir) "deps/eqc/ebin")))
+(defun erlang-flymake-get-include-dirs ()
+  (list (concat (erlang-flymake-get-app-dir) "include")
+        (concat (erlang-flymake-get-app-dir) "deps")))

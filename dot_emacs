@@ -332,3 +332,4 @@
 (add-hook 'magit-log-edit-mode-hook 'font-lock-fontify-buffer)
 
 
+(global-set-key "\M-/" 'hippie-expand)

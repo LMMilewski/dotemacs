@@ -59,6 +59,9 @@
 (setq tab-width 4)
 (add-hook 'c++-mode-hook (lambda () (c-set-style "stroustrup")))
 
+;; show column number
+(column-number-mode t)
+
 ;; higlight current line
 ;; http://emacs-fu.blogspot.com/2008/12/highlighting-current-line.html
 (defface hl-line '((t (:background "Gray")))

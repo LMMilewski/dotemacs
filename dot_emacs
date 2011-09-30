@@ -68,10 +68,11 @@
 
 ;; marek tabs, trailing whitespaces and too long lines
 (require 'whitespace)
-(setq whitespace-style '(tabs
+(setq whitespace-style '(face
                          lines-tail
                          trailing))
 (global-whitespace-mode t)
+(whitespace-mode t)
 
 ;; git mode for Emacs
 (require 'magit)

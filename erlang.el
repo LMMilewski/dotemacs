@@ -76,3 +76,8 @@
 (defun erlang-flymake-get-include-dirs ()
   (list (concat (erlang-flymake-get-app-dir) "include")
         (concat (erlang-flymake-get-app-dir) "deps")))
+
+
+;; Set additional options for erlang-compile command
+;; set include directory (in OTP like architecture)
+(setq erlang-compile-extra-opts '((i . "../include")))

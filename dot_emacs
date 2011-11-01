@@ -337,3 +337,10 @@
 
 
 (global-set-key "\M-/" 'hippie-expand)
+
+(defun lmm/toggle-selective-display ()
+  (interactive)
+  (if selective-display
+      (set-selective-display nil)
+    (set-selective-display 1)))
+(global-set-key [(f3)] 'lmm/toggle-selective-display)

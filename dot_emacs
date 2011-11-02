@@ -49,6 +49,8 @@
 
 (load-file (concat my-emacs-dir "erlang.el"))
 
+(load-file (concat my-emacs-dir "post-review.el"))
+
 ;; setup mo-git-blame
 (add-to-list 'load-path "~/.emacs.d/mo-git-blame")
 (autoload 'mo-git-blame-file "mo-git-blame" nil t)
@@ -346,3 +348,4 @@
                           ((eq selective-display 1) nil))))
 
 (global-set-key [(f3)] 'lmm/cycle-selective-display)
+

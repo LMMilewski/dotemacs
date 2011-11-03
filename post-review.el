@@ -86,17 +86,19 @@ is visible for others"
          (description (car (cdr sum-desc)))
 
          (cmd (concat "post-review "
-                     "--server=" quot post-review/hostname quot eop
-                     "--username=" quot post-review/username quot eop
-                     "--password=" quot post-review/password quot eop
-                     "--target-groups=" quot post-review/groups quot eop
-                     "--target-people=" quot people quot eop
-                     "--branch=" quot (magit-get-current-branch) quot eop
-                     "--description=" quot description quot eop
-                     "--summary=" quot summary quot eop
-                     )))
+                      "--server=" quot post-review/hostname quot eop
+                      "--username=" quot post-review/username quot eop
+                      "--password=" quot post-review/password quot eop
+                      "--target-groups=" quot post-review/groups quot eop
+                      "--target-people=" quot people quot eop
+                      "--branch=" quot (magit-get-current-branch) quot eop
+                      "--description=" quot description quot eop
+                      "--summary=" quot summary quot eop
+                      )))
     (let ((retmsg (shell-command-to-string cmd)))
       (string-match "\\(http://.*\\)\n" retmsg)
-      (message retmsg)
-      (message (match-string 1 retmsg))
-      (browse-url (match-string 1 retmsg)))))
+      (if (match-string 1 retmsg)
+          (progn (message (match-string 1 retmsg))
+                 (browse-url (match-string 1 retmsg)))
+        (progn (message cmd)
+               (message retmsg))))))
